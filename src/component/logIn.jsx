@@ -50,6 +50,7 @@ const LoginPage = () => {
       localStorage.setItem("token", token || userToken);
       localStorage.setItem("email", userEmail);
     } catch (err) {
+      console.error(err);
       if (err.response && err.response.data?.message) {
         setError(err.response.data.message);
       } else {
