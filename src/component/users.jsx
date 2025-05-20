@@ -29,14 +29,14 @@ const Users = () => {
       const limit = 10;
       const token = localStorage.getItem("token");
       if (!token) {
-        console.error("Token not found in localStorage");
+        // console.error("Token not found in localStorage");
         return;
       }
       const response = await axiosInstance.get(`/users`, {
         params: { page: pageNumber, limit },
       });
 
-      console.log(response);
+      // console.log(response);
       // const totalUsers = response.headers["total-users"];
       const totalPages = response.headers["total-pages"];
       const currentPage = response.headers["current-page"];
@@ -45,7 +45,9 @@ const Users = () => {
       setPage(currentPage);
       setTotalPages(totalPages);
     } catch (error) {
-      console.error("Error fetching users:", error);
+      // Handle error
+      alert("Error fetching users", error);
+      // console.error("Error fetching users:", error);
     }
   };
 
@@ -82,7 +84,8 @@ const Users = () => {
       await axiosInstance.delete(`/users/${id}`);
       setUsersData((prevUsers) => prevUsers.filter((user) => user.id !== id));
     } catch (error) {
-      console.error("Error deleting user:", error);
+      alert("Error deleting user", error);
+      // console.error("Error deleting user:", error);
     }
   };
 
@@ -135,7 +138,8 @@ const Users = () => {
       }
       handleCloseModal();
     } catch (err) {
-      console.error("Submit Error:", err);
+      alert("Submit Error", err);
+      // console.error("Submit Error:", err);
       setError(err.response?.data?.message || "Something went wrong.");
     }
   };
@@ -148,7 +152,8 @@ const Users = () => {
 
       localStorage.removeItem("token");
     } catch (error) {
-      console.error("Logout failed:", error);
+      alert("Logout failed. Please try again.", error);
+      // console.error("Logout failed:", error);
     }
   };
 

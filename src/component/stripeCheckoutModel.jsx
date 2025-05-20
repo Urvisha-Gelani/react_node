@@ -53,13 +53,16 @@ const CheckoutForm = ({ show, handleClose, amount, payableUserId }) => {
       });
 
       if (result.error) {
-        console.log(`❌ ${result.error.message}`);
+        alert(result.error.message);
+        // console.log(`❌ ${result.error.message}`);
       } else if (result.paymentIntent.status === "succeeded") {
-        console.log("✅ Payment successful!");
+        alert("✅ Payment successful!");
+        // console.log("✅ Payment successful!");
       }
     } catch (err) {
-      console.error("Payment error:", err);
-      console.log("❌ Payment failed.");
+      // console.error("Payment error:", err);
+      // console.log("❌ Payment failed.");
+      alert("Payment failed. Please try again.", err);
     } finally {
       setLoading(false);
     }

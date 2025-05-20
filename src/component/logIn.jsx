@@ -42,15 +42,15 @@ const LoginPage = () => {
           password,
         }
       );
-      console.log(response, "********login************");   
+      // console.log(response, "********login************");   
       const userEmail = response.data.email;
       const userToken = response.data.token;
-      console.log("Token:", response.headers);
+      // console.log("Token:", response.headers);
       const token = response.headers["authorization"];
       localStorage.setItem("token", token || userToken);
       localStorage.setItem("email", userEmail);
     } catch (err) {
-      console.error(err);
+      // console.error(err);
       if (err.response && err.response.data?.message) {
         setError(err.response.data.message);
       } else {
