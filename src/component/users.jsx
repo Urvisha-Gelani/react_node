@@ -51,8 +51,20 @@ const Users = () => {
     }
   };
 
+  const fetchPayment = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        return;
+      }
+      await axiosInstance.get(`/payments `);
+    } catch (error) {
+      alert("Error fetching users", error);
+    }
+  };
   useEffect(() => {
     fetchUsers(page);
+    fetchPayment();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
