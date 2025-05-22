@@ -17,7 +17,7 @@ const CheckoutForm = ({ show, handleClose, amount, payableUserId }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [loading, setLoading] = useState(false);
-  const amountInCents = amount * 100;
+  const amountInCents = amount;
 
   const handlePayment = async (e) => {
     e.preventDefault();

@@ -4,8 +4,10 @@ import { Formik, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axiosInstance from "../../axiosInstance";
 import StripeCheckoutModal from "./stripeCheckoutModel";
+import { format } from "date-fns";
 const Users = () => {
   const [usersData, setUsersData] = useState([]);
+  const [paymentData, setPaymentData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
   const [error, setError] = useState("");
@@ -57,9 +59,12 @@ const Users = () => {
       if (!token) {
         return;
       }
-      await axiosInstance.get(`/payments `);
+      const response = await axiosInstance.get(`/payments `);
+      if (response.data) {
+        setPaymentData(response.data);
+      }
     } catch (error) {
-      alert("Error fetching users", error);
+      alert("Error fetching payments", error);
     }
   };
   useEffect(() => {
@@ -168,20 +173,7 @@ const Users = () => {
       // console.error("Logout failed:", error);
     }
   };
-
-  // const convertFilesToBase64 = (files) => {
-  //   return Promise.all(
-  //     Array.from(files).map((file) => {
-  //       return new Promise((resolve, reject) => {
-  //         const reader = new FileReader();
-  //         reader.readAsDataURL(file);
-  //         reader.onload = () => resolve(reader.result);
-  //         reader.onerror = (error) => reject(error);
-  //       });
-  //     })
-  //   );
-  // };
-
+  // console.log(paymentData, "*****payment****");
   return (
     <div className="container mt-4">
       <div className="d-flex justify-content-between align-items-center">
@@ -396,6 +388,48 @@ const Users = () => {
           payableUserId={payableUserId}
         />
       )}
+      <div className="mt-3">
+        <h3>Payment Details</h3>
+        <table className="table table-striped">
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Amount</th>
+              <th>Currency</th>
+              <th>Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {paymentData.map((payment) => {
+              const { userDetails, currency, amount, createdAt, status, id } =
+                payment;
+              const { name, email } = userDetails;
+              return (
+                <tr key={id}>
+                  <td>{name}</td>
+                  <td>{email}</td>
+                  <td>${amount.toFixed(2)}</td>
+                  <td>{currency.toUpperCase()}</td>
+                  <td>
+                    {format(new Date(createdAt), "dd/MM/yyyy, hh:mm:ss a")}
+                  </td>
+                  <td>
+                    <span
+                      className={`badge ${
+                        status === "succeeded" ? "bg-success" : "bg-warning"
+                      }`}
+                    >
+                      {status}
+                    </span>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
